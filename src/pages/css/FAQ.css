@@ -1,0 +1,112 @@
+.faq-module-container {
+    background-color: #ffffff; /* White background for the module */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow as in the image */
+    padding: 30px; /* Internal padding */
+    margin: 40px auto; /* Center the module on the page */
+    max-width: 800px; /* Limit module width */
+    box-sizing: border-box; /* Include padding in element's total width/height */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+}
+
+.faq-title {
+    font-size: 1.8em; /* Title size */
+    color: #333; /* Dark text for title */
+    margin-bottom: 30px; /* Space below title */
+    font-weight: 600; /* Semi-bold title */
+}
+
+.faq-list {
+    border-top: 1px solid #eee; /* Top border for the first item's separator */
+}
+
+.faq-item {
+    border-bottom: 1px solid #eee; /* Separator line between items */
+}
+
+.faq-question-button {
+    width: 100%; /* Full width button */
+    background: none; /* No background */
+    border: none; /* No border */
+    text-align: left; /* Align text to the left */
+    padding: 18px 0; /* Vertical padding inside the button */
+    font-size: 1em; /* Question text size */
+    color: #444; /* Dark gray text */
+    cursor: pointer;
+    display: flex; /* Use flexbox to align text and arrow */
+    justify-content: space-between; /* Push arrow to the right */
+    align-items: center; /* Vertically center content */
+    font-weight: 500; /* Medium font weight */
+    transition: color 0.2s ease; /* Smooth transition for text color */
+}
+
+.faq-question-button:hover {
+    color: #007bff; /* Highlight text on hover */
+}
+
+.faq-question-button.open {
+    color: #007bff; /* Active question color */
+    font-weight: 600;
+}
+
+.faq-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #666; /* Down arrow initially */
+    transition: transform 0.3s ease; /* Smooth rotation for arrow */
+    margin-left: 15px; /* Space between text and arrow */
+    flex-shrink: 0; /* Prevent arrow from shrinking */
+}
+
+.faq-question-button.open .faq-arrow {
+    transform: rotate(180deg); /* Rotate arrow up when open */
+    border-top-color: #007bff; /* Change arrow color when open */
+}
+
+.faq-answer-container {
+    max-height: 0; /* Hidden by default */
+    overflow: hidden; /* Hide overflowing content */
+    transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Smooth transition */
+    background-color: #f9f9f9; /* Slightly lighter background for the answer area */
+    border-radius: 0 0 8px 8px; /* Round bottom corners when answer is open */
+}
+
+.faq-answer-container.open {
+    max-height: 200px; /* Sufficient height to show content (adjust as needed) */
+    padding: 0 0 15px 0; /* Add bottom padding when open */
+}
+
+.faq-answer {
+    padding: 0 15px 0 0; /* Padding around the answer text */
+    font-size: 0.95em;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .faq-module-container {
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    .faq-title {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    .faq-question-button {
+        padding: 15px 0;
+        font-size: 0.95em;
+    }
+
+    .faq-answer-container.open {
+        padding: 0 0 10px 0;
+    }
+
+    .faq-answer {
+        padding: 0 10px 0 0;
+    }
+}

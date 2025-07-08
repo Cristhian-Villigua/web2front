@@ -1,0 +1,107 @@
+/* General container for the section */
+.servicios {
+    padding: 60px 0; /* Vertical padding around the entire section */
+    background-color: #f8f8f8; /* Light background color for the section */
+    font-family: 'Arial', sans-serif; /* A clean, modern font */
+}
+
+/* Inner container to limit width and center content */
+.contenedor {
+    width: 90%; /* Adjust width as needed */
+    max-width: 1200px; /* Max width to prevent it from getting too wide on large screens */
+    margin: 0 auto; /* Center the container */
+    overflow: hidden; /* Clear floats or contain any potential overflows */
+}
+
+/* Section Title */
+.titulo {
+    text-align: center;
+    font-size: 2.5em; /* Larger, prominent title */
+    margin-bottom: 50px; /* Space below the title */
+    color: #333; /* Dark gray for text */
+    font-weight: 700; /* Bold title */
+}
+
+/* Container for individual service cards (the grid) */
+.servicio-cont {
+    display: grid; /* Use CSS Grid for a robust layout */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns: min 300px, max 1fr */
+    gap: 30px; /* Space between the cards */
+    justify-content: center; /* Center cards if they don't fill the row */
+}
+
+/* Individual service card styling */
+.servicio-ind {
+    background-color: #fff; /* White background for each card */
+    border-radius: 10px; /* Rounded corners for the cards */
+    overflow: hidden; /* Crucial: Hides parts of image that go beyond border-radius */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    text-align: center; /* Center align content inside the card */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+    display: flex; /* Use flexbox to stack content vertically */
+    flex-direction: column;
+}
+
+/* Hover effect for cards */
+.servicio-ind:hover {
+    transform: translateY(-5px); /* Slightly lift the card on hover */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+}
+
+/* Image within the card */
+.servicio-ind img {
+    width: 100%; /* Make image fill the width of the card */
+    height: 200px; /* Fixed height for consistent image size */
+    object-fit: cover; /* Cover the area, cropping if necessary, no distortion */
+    border-radius: 10px 10px 0 0; /* Rounded top corners, sharp bottom corners */
+}
+
+/* Title within the card */
+.servicio-ind h3 {
+    font-size: 1.3em; /* Size for the "Vuelos a Loja" text */
+    color: #555; /* Slightly darker text for title */
+    margin: 20px 0 10px; /* Space above and below the title */
+    padding: 0 15px; /* Horizontal padding for title */
+    font-weight: 600; /* Semi-bold */
+}
+
+/* Description/Paragraph within the card */
+.servicio-ind p {
+    font-size: 0.95em; /* Slightly smaller text for description */
+    color: #777; /* Lighter text for description */
+    padding: 0 20px 20px; /* Padding on sides and bottom for the description */
+    line-height: 1.6; /* Better readability */
+    flex-grow: 1; /* Allow description to take up available space, pushing text to bottom */
+    display: none; /* Hide descriptions to match the image, which only shows titles */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .titulo {
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    .servicio-cont {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjust min-width for smaller screens */
+        gap: 20px; /* Reduce gap on smaller screens */
+    }
+
+    .servicio-ind {
+        padding-bottom: 0; /* Remove bottom padding if description is hidden */
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor {
+        width: 95%; /* More width on very small screens */
+    }
+
+    .titulo {
+        font-size: 1.8em;
+    }
+
+    .servicio-cont {
+        grid-template-columns: 1fr; /* Single column on very small screens */
+    }
+}

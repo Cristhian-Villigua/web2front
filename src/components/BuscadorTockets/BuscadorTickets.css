@@ -1,0 +1,341 @@
+.flight-search-module-container {
+    background-color: #3f0d4f; /* Dark purple background from original image */
+    background-color: #2e7bff; /* Use this blue color from your new images */
+    padding: 30px; /* Increase padding to give more internal space */
+    border-radius: 15px; /* Slightly more rounded corners */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* A more modern font */
+    color: white;
+    max-width: 950px; /* Set a max-width to control overall size */
+    margin: 40px auto; /* Center the module on the page */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+    box-sizing: border-box; /* Crucial: padding and border are included in the element's total width and height */
+}
+
+/* Tabs Navigation - Adjusting for the new blue theme */
+.tabs-navigation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px; /* More space below tabs */
+    gap: 20px;
+}
+
+.passajes-label { /* Renamed from flights-label to pasajes-label based on new image */
+    font-weight: 600; /* Bolder font */
+    font-size: 1.3em;
+    margin-right: 25px;
+}
+
+.tab-group {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent darker blue for tab background */
+    border-radius: 25px; /* More rounded pill shape */
+    padding: 6px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 25px; /* Adjusted padding for better button size */
+    border-radius: 20px; /* Matches tab-group rounding */
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    white-space: nowrap; /* Prevent text from wrapping inside the tab */
+}
+
+.tab.active {
+    background-color: white; /* Active tab is white */
+    color: #2e7bff; /* Text color changes to blue */
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for active tab */
+}
+
+/* --- No Flight+Hotel tab in the new image, so removing its specific styles --- */
+/* If you re-add it, style it consistently */
+
+/* Search Form Grid - The most critical part for containment */
+.search-form-grid {
+    display: grid;
+    /* Define columns with fr units for flexibility.
+       Adjust these based on how many columns you need and their relative widths.
+       In your new image, it looks like 4 main columns plus the search button.
+       We'll make the first two (Origen, Destino) slightly wider. */
+    grid-template-columns: 1.5fr 0.1fr 1.5fr 2fr 1.2fr 0.8fr; /* Adjust as needed for specific content */
+    gap: 15px; /* Consistent gap between grid items */
+    align-items: end; /* Align items to the bottom of their grid cells */
+    margin-bottom: 25px;
+}
+
+/* Input Group Styles */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.15); /* Slightly darker blue for input backgrounds */
+    border-radius: 10px; /* Smoother rounded corners */
+    padding: 15px 20px; /* More padding inside input groups */
+    box-sizing: border-box; /* Ensure padding is included in input group size */
+    min-height: 80px; /* Ensure a consistent minimum height for all input groups */
+    justify-content: space-between; /* Pushes label to top, input to bottom */
+}
+
+.input-group label {
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.7); /* Lighter white for labels */
+    margin-bottom: 5px;
+    text-transform: uppercase; /* Match the label style in the image */
+    letter-spacing: 0.5px;
+}
+
+.input-group input {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1em; /* Slightly larger font for input values */
+    outline: none;
+    padding: 0; /* Remove default input padding */
+    width: 100%; /* Important: Make input fill its container */
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5); /* Lighter placeholder text */
+}
+
+/* Specific Input Group Adjustments */
+.origin {
+    display: flex;
+    flex-direction: row; /* Align icon and input horizontally */
+    align-items: center;
+    gap: 10px;
+    grid-column: 1 / span 1; /* Explicitly place in the first column */
+}
+
+.radio-icon {
+    width: 22px; /* Larger icon */
+    height: 22px;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+
+.swap-button {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.4); /* Add a subtle border */
+    border-radius: 50%; /* Make it circular */
+    color: white;
+    font-size: 1.3em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px; /* Fixed size for the circle */
+    height: 35px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    margin-bottom: 0px; /* Align to the center between inputs vertically */
+    align-self: center; /* Center vertically within its grid cell */
+    grid-column: 2 / span 1; /* Explicitly place in the second (small) column */
+}
+
+.swap-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg); /* Nice little animation */
+}
+
+.destination {
+    grid-column: 3 / span 1; /* Explicitly place in the third column */
+}
+
+.dates {
+    grid-column: 4 / span 1; /* Explicitly place in the fourth column */
+}
+
+.date-inputs {
+    display: flex;
+    gap: 10px;
+    width: 100%; /* Ensure flex container fills parent */
+}
+
+.date-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1; /* Allow them to grow and shrink equally */
+}
+
+.calendar-icon {
+    font-size: 1.3em;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.passengers-class { /* Renamed for clarity, matches new image layout */
+    grid-column: 5 / span 1; /* Place in the fifth column */
+}
+
+.passengers-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer; /* Indicate it's clickable */
+}
+
+.user-icon {
+    font-size: 1.3em;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-button {
+    grid-column: 6 / span 1; /* Place in the last column */
+    background-color: #ef4444; /* Brighter red from the new image */
+    border: none;
+    border-radius: 10px; /* Match input group border-radius */
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 15px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%; /* Make it fill the cell height */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #dc2626; /* Slightly darker red on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.search-icon {
+    font-size: 1.4em;
+}
+
+/* Toggle Options */
+.toggle-options {
+    margin-top: 25px; /* More space above toggles */
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* More space between checkbox and label */
+    font-size: 1em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.toggle-item input[type="checkbox"] {
+    /* Custom styling for toggle switch */
+    appearance: none; /* Hide default checkbox */
+    width: 50px; /* Wider toggle switch */
+    height: 26px; /* Taller toggle switch */
+    background-color: rgba(255, 255, 255, 0.3); /* Lighter grey for off state */
+    border-radius: 13px; /* Half of height for perfect pill shape */
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-item input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 22px; /* Size of the thumb */
+    height: 22px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px; /* Center vertically */
+    left: 2px; /* Initial position */
+    transition: transform 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for the thumb */
+}
+
+.toggle-item input[type="checkbox"]:checked {
+    background-color: #4CAF50; /* Green when checked */
+}
+
+.toggle-item input[type="checkbox"]:checked::before {
+    transform: translateX(24px); /* Move thumb to the right (width - thumb_width - 2*left_offset) */
+}
+
+/* Basic Responsiveness - Add more breakpoints as needed */
+@media (max-width: 768px) {
+    .flight-search-module-container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .tabs-navigation {
+        flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+        justify-content: center;
+        gap: 10px;
+    }
+
+    /* ... (previous CSS remains the same) ... */
+
+.search-form-grid {
+    display: grid;
+    /* Adjusted grid-template-columns for varying input widths:
+       - Column 1 (Origen): 2fr (relatively wide)
+       - Column 2 (Swap button): 0.1fr (very narrow for the button)
+       - Column 3 (Destino): 2fr (similar to Origen)
+       - Column 4 (Fechas): 2fr (similar to Origen/Destino)
+       - Column 5 (Pasajeros): 1.2fr (noticeably narrower)
+       - Column 6 (Buscar button): 1.5fr (for the search button)
+    */
+    grid-template-columns: 2fr 0.1fr 2fr 2fr 1.2fr 1.5fr;
+    gap: 15px; /* Consistent gap between grid items */
+    align-items: end; /* Align items to the bottom of their grid cells */
+    margin-bottom: 25px;
+}
+
+/* ... (rest of your CSS remains the same) ... */
+
+/* Also, ensure these specific grid-column assignments are correct if you're using them */
+.origin {
+    grid-column: 1 / span 1;
+}
+
+.swap-button {
+    grid-column: 2 / span 1;
+}
+
+.destination {
+    grid-column: 3 / span 1;
+}
+
+.dates {
+    grid-column: 4 / span 1;
+}
+
+.passengers-class {
+    grid-column: 5 / span 1; /* This is the key column for the narrower width */
+}
+
+.search-button {
+    grid-column: 6 / span 1;
+}
+
+/* ... (rest of your CSS, including media queries) ... */
+
+    .origin, .destination, .dates, .passengers-class, .search-button {
+        grid-column: 1 / -1; /* Make them span full width */
+    }
+
+    .swap-button {
+        display: none; /* Hide swap button on small screens or make it a separate row */
+    }
+
+    .tab-group {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tab {
+        flex: 1; /* Make tabs equally wide */
+        text-align: center;
+    }
+}
