@@ -65,12 +65,12 @@ const SignUpForm: React.FC = () => {
 return (
     <div className="ingreso form-container sign-up-container">
       <form onSubmit={formik.handleSubmit}>
-        <h1>Create Account</h1>
+        <h1>   Crear cuenta    </h1>
         
         <input
           type="text"
           name="name"
-          placeholder="Name"
+          placeholder="Nombre"
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -82,7 +82,7 @@ return (
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="Coreo Electronico"
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -94,7 +94,7 @@ return (
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Contraseña"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -106,7 +106,7 @@ return (
         <input
           type="password"
           name="password_confirmation"
-          placeholder="Confirm Password"
+          placeholder="Confirmar contraseña"
           value={formik.values.password_confirmation}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -117,7 +117,7 @@ return (
 
         {errorMsg && <div className="error-message">{errorMsg}</div>}
 
-        <button type="submit">Sign Up</button>
+        <button type="submit">Registrarse</button>
       </form>
     </div>
   );

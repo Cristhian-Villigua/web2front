@@ -59,12 +59,12 @@ const SignInForm: React.FC = () => {
 return (
     <div className="ingreso form-container sign-in-container">
       <form onSubmit={formik.handleSubmit}>
-        <h1>Sign in</h1>
+        <h1>Iniciar Sesion</h1>
         
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="Correo Electronico"
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -76,7 +76,7 @@ return (
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Contraseña"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -85,11 +85,11 @@ return (
           <div className="error">{formik.errors.password}</div>
         )}
 
-        <a href="#">Forgot your password?</a>
+        <a href="#">Recuperar contraseña</a>
 
         {errorMsg && <div className="error-message">{errorMsg}</div>}
 
-        <button type="submit">Sign In</button>
+        <button type="submit">Ingresar</button>
       </form>
     </div>
   );

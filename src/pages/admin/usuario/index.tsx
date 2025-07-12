@@ -77,7 +77,7 @@ const UsuarioList: React.FC = () => {
   return (
     <AdminLayout>
       <div className="row">
-        <h1>Lista de Uusarios</h1>
+        <h1>Lista de Usuarios</h1>
         <hr />
         <div className="col-md-12">
           <div className="card card-outline card-primary">

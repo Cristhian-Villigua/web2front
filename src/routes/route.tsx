@@ -23,6 +23,7 @@ import ShowUsuario from "../pages/admin/usuario/show";
 import EditUsuario from "../pages/admin/usuario/edit";
 import Prueba from "../pages/Server/prueba";
 import BaseDashBoard from "../pages/layout/BaseDashBoard";
+import CreateUsuario from "../pages/admin/usuario/create";
 
 export const routes = [
     {
@@ -160,7 +161,7 @@ export const routes = [
         path: '/admin/usuarios/create',
         element: (
             <ProtectedRoute allowedRoles={["admin"]}>
-                <CreateUser />
+                <CreateUsuario   />
             </ProtectedRoute>
         ),
     },{

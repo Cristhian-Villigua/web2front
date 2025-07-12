@@ -126,7 +126,7 @@ const CreateUsuario = () => {
                       type="text"
                       name="role"
                       className="form-control"
-                      value="empleado"
+                      value="usuario"
                       readOnly
                     />
                   </div>

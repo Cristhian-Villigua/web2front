@@ -28,7 +28,7 @@ const Login = () => {
   .then((response) => {
     if (response.data && response.data.token) {
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user)); // <-- Guarda el usuario completo
+      localStorage.setItem("user", JSON.stringify(response.data.user)); 
       navigate("/admin");
     } else if (response.data && response.data.message) {
       setErrorMsg(response.data.message);
@@ -63,7 +63,7 @@ const Login = () => {
                     <InputLabel 
                       label="Correo"
                       name="email"
-                      placeholder="example@gmail.com"
+                      placeholder="Correo electronico"
                       error={errors.email}
                       onChange={handleChange}
                       value={values.email}

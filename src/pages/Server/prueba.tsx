@@ -23,25 +23,25 @@ const Prueba: React.FC = () => {
         <div className="overlay-container">
           <div className="overlay">
             <div className="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>To keep connected with us please login with your personal info</p>
+              <h1>¿Ya tienes cuenta?</h1>
+              <p>Ingresa sesión para continuar</p>
               <button
                 className="ghost"
                 id="signIn"
                 onClick={() => handleOnClick("signIn")}
               >
-                Sign In
+                Iniciar Sesión
               </button>
             </div>
             <div className="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details and start journey with us</p>
+              <h1>¿Eres nuevo?</h1>
+              <p>Registrate para poder usar nuestro servicio</p>
               <button
                 className="ghost"
                 id="signUp"
                 onClick={() => handleOnClick("signUp")}
               >
-                Sign Up
+                Registrarse
               </button>
             </div>
           </div>
