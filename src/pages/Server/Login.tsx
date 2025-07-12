@@ -29,25 +29,7 @@ const Login = () => {
     if (response.data && response.data.token) {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user)); // <-- Guarda el usuario completo
-     const role = response.data.user.role;
-
-      switch (role) {
-        case "admin":
-          navigate("/admin");
-          break;
-        case "proveedor":
-          navigate("/admin");
-          break;
-        case "empleado":
-          navigate("/admin");
-          break;
-        case "usuario":
-          navigate("/"); // o alguna ruta personalizada si tienes vista para el usuario final
-          break;
-        default:
-          setErrorMsg("Rol no reconocido.");
-          break;
-      }
+      navigate("/admin");
     } else if (response.data && response.data.message) {
       setErrorMsg(response.data.message);
     }

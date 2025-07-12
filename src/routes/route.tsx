@@ -21,14 +21,19 @@ import DeleteEmpleado from "../pages/admin/empleado/delete";
 import UsuarioList from "../pages/admin/usuario";
 import ShowUsuario from "../pages/admin/usuario/show";
 import EditUsuario from "../pages/admin/usuario/edit";
+import Prueba from "../pages/Server/prueba";
+import BaseDashBoard from "../pages/layout/BaseDashBoard";
 
 export const routes = [
     {
         path: '/',
         element: <Welcome />,
     },{
-        path: '/Login',
+        path: '/Loginantiguo',
         element: <Login />,
+    },{
+        path: '/login',
+        element: <Prueba />,
     },{
         path: '/Register',
         element: <Register />,
@@ -180,6 +185,14 @@ export const routes = [
             </ProtectedRoute>
         ),
     },{
-        
+        path: '/dashboard',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor", "empleado"]}>
+                <BaseDashBoard />
+            </ProtectedRoute>
+        ),
+        children: [
+            
+        ]
     },
 ];
