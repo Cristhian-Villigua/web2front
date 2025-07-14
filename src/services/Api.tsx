@@ -10,7 +10,7 @@ export class Api {
                 ...(options.headers || {}),
             },
         });
-        const dataResponse = await response.json();
+        const dataResponse: T = await response.json();
         return {
             statusCode: response.status,
             data: dataResponse,
@@ -27,7 +27,7 @@ export class Api {
             },
             body: JSON.stringify(data),
         });
-        const dataResponse = await response.json();
+        const dataResponse: T = await response.json();
         return {
             statusCode: response.status,
             data: dataResponse,
@@ -44,7 +44,7 @@ export class Api {
             },
             body: JSON.stringify(data),
         });
-        const dataResponse = await response.json();
+        const dataResponse: T = await response.json();
         return {
             statusCode: response.status,
             data: dataResponse,
@@ -61,7 +61,7 @@ export class Api {
             },
             body: JSON.stringify(data),
         });
-        const dataResponse = await response.json();
+        const dataResponse: T = await response.json();
         return {
             statusCode: response.status,
             data: dataResponse,
@@ -77,7 +77,7 @@ export class Api {
                 ...(options.headers || {}),
             },
         });
-        const dataResponse = await response.json();
+        const dataResponse: T = await response.json();
         return {
             statusCode: response.status,
             data: dataResponse,

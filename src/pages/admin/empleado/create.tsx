@@ -241,7 +241,7 @@ const CreateEmpleado = () => {
                     <button
                       type="button"
                       className="btn btn-secondary"
-                      onClick={() => navigate("/admin/users")}
+                      onClick={() => navigate("/admin/employees")}
                     >
                       Cancelar
                     </button>

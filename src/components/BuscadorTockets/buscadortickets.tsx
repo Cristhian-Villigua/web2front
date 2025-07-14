@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './BuscadorTickets.css'; // For styling
 
 const Buscadortickets = () => {
@@ -115,7 +115,7 @@ const Buscadortickets = () => {
                         <input
                             type="text"
                             value={passengers}
-                            readOnly // Typically read-only, opens a modal
+                            onChange={(e) => setPassengers(e.target.value)}
                             onClick={() => alert('Seleccione la cantidad de pasajeros')}
                         />
                     </div>

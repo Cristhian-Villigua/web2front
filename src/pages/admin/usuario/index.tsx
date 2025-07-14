@@ -81,6 +81,9 @@ const UsuarioList: React.FC = () => {
         <hr />
         <div className="col-md-12">
           <div className="card card-outline card-primary">
+            <div className="card-header d-flex justify-content-between align-items-center">
+              <h3 className="card-title">Listado de Usuarios</h3>
+            </div>
             <div className="card-body">
               <table
                 id="example1"

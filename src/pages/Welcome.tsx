@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import HeaderPublico from "./lading/header"
 import Buscadortickets from "../components/BuscadorTockets/buscadortickets"
 import Destinos from "./lading/Destinos"

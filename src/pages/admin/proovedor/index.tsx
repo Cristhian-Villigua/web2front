@@ -83,7 +83,7 @@ const ProveedorList: React.FC = () => {
         <div className="col-md-12">
           <div className="card card-outline card-primary">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h3 className="card-title">Registrar Proveedor</h3>
+              <h3 className="card-title">Listado de Proveedores</h3>
               <a href="/admin/providers/create" className="btn btn-primary ms-auto">
                 Añadir
               </a>

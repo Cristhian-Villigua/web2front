@@ -24,6 +24,11 @@ import EditUsuario from "../pages/admin/usuario/edit";
 import Prueba from "../pages/Server/prueba";
 import BaseDashBoard from "../pages/layout/BaseDashBoard";
 import CreateUsuario from "../pages/admin/usuario/create";
+import Cooperativalist from "../pages/admin/coopertiva";
+import CreateCooperativa from "../pages/admin/coopertiva/create";
+import ShowCooperativa from "../pages/admin/coopertiva/show";
+import EditCooperativa from "../pages/admin/coopertiva/edit";
+import DeleteCooperativa from "../pages/admin/coopertiva/delete";
 
 export const routes = [
     {
@@ -183,6 +188,41 @@ export const routes = [
         element: (
             <ProtectedRoute allowedRoles={["admin"]}>
                 <DeleteUser />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/cooperativa',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <Cooperativalist />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/cooperativa/create',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <CreateCooperativa />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/cooperativa/:id',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <ShowCooperativa />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/cooperativa/:id/edit',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <EditCooperativa />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/cooperativa/:id/confirm-delete',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <DeleteCooperativa />
             </ProtectedRoute>
         ),
     },{

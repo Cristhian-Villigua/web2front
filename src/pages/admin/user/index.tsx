@@ -98,7 +98,7 @@ const UserList: React.FC = () => {
         <div className="col-md-10">
           <div className="card card-outline card-primary">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h3 className="card-title">Registrar Administrador</h3>
+              <h3 className="card-title">Listado de Administradores</h3>
               <a href="/admin/users/create" className="btn btn-primary ms-auto">
                 Añadir
               </a>

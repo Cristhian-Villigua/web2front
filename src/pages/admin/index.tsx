@@ -7,6 +7,7 @@ const Index = () => {
   const [totalEmployees, setTotalEmployees] = useState<number>(0);
   const [totalProviders, setTotalProviders] = useState<number>(0);
   const [totalUsuarios, setTotalUsuarios] = useState<number>(0);
+  const [totalCooperativa, setTotalCooperativa] = useState<number>(0);
   const [username, setUsername] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
 
@@ -35,11 +36,12 @@ const Index = () => {
       },
     })
       .then((response) => {
-        const { admin, empleados, proveedores, usuarios } = response.data;
+        const { admin, empleados, proveedores, usuarios, cooperativa } = response.data;
         setTotaladmin(admin);
         setTotalEmployees(empleados);
         setTotalProviders(proveedores);
         setTotalUsuarios(usuarios);
+        setTotalCooperativa(cooperativa);
       })
       .catch((err) => {
         console.error("Error al obtener conteos:", err);
@@ -118,6 +120,22 @@ const Index = () => {
                 </div>
                 <a href="/admin/usuarios" className="small-box-footer">
                   Más información <i className="fas bi bi-person-fill" />
+                </a>
+              </div>
+            </div>
+          )}
+          {(role === "admin" || role === "proveedor") && (
+            <div className="col-lg-3 col-6">
+              <div className="small-box bg-lightblue">
+                <div className="inner">
+                  <h3>{totalCooperativa}</h3>
+                  <p>Cooperativa</p>
+                </div>
+                <div className="icon">
+                  <i className="fas bi bi-building" />
+                </div>
+                <a href="/admin/cooperativa" className="small-box-footer">
+                  Más información <i className="fas bi bi-building" />
                 </a>
               </div>
             </div>

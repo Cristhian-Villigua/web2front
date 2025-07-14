@@ -82,7 +82,7 @@ const EmpleadoList: React.FC = () => {
         <div className="col-md-12">
           <div className="card card-outline card-primary">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h3 className="card-title">Registrar empleado</h3>
+              <h3 className="card-title">Listado de empleados</h3>
               <a href="/admin/employees/create" className="btn btn-primary ms-auto">
                 Añadir
               </a>

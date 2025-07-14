@@ -8,6 +8,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isProvidersMenuOpen, setIsProvidersMenuOpen] = useState(false);
   const [isEmployeeMenuOpen, setIsEmployeeMenuOpen] = useState(false);
   const [isUsarioMenuOpen, setIsUsuarioMenuOpen] = useState(false);
+  const [isCooperativaMenuOpen, setIsCooperativaMenuOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -100,15 +101,15 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               )}
 
               {(role === "admin" || role === "proveedor") && (
-                <li className={`nav-item has-treeview ${isEmployeeMenuOpen ? 'menu-open' : ''}`}>
-                  <a className="nav-link active" style={{ cursor: "pointer", textAlign: "left" }} onClick={() => setIsEmployeeMenuOpen(!isEmployeeMenuOpen)}>
+                <li className={`nav-item has-treeview ${isCooperativaMenuOpen ? 'menu-open' : ''}`}>
+                  <a className="nav-link active" style={{ cursor: "pointer", textAlign: "left" }} onClick={() => setIsCooperativaMenuOpen(!isCooperativaMenuOpen)}>
                     <i className="nav-icon fas bi bi-person-fill-check"></i>
                     <p>
                       Empleado
                       <i className="right fas fa-angle-left"></i>
                     </p>
                   </a>
-                  <ul className="nav nav-treeview" style={{ display: isEmployeeMenuOpen ? "block" : "none" }}>
+                  <ul className="nav nav-treeview" style={{ display: isCooperativaMenuOpen ? "block" : "none" }}>
                     <li className="nav-item" style={{ textAlign: "left" }}>
                       <Link to="/admin/employees/create" className="nav-link active">
                         <i className="far fa-circle nav-icon"></i>
@@ -150,6 +151,31 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </li>
               )}
 
+              {(role === "admin" || role === "proveedor") && (
+                <li className={`nav-item has-treeview ${isEmployeeMenuOpen ? 'menu-open' : ''}`}>
+                  <a className="nav-link active" style={{ cursor: "pointer", textAlign: "left" }} onClick={() => setIsEmployeeMenuOpen(!isEmployeeMenuOpen)}>
+                    <i className="nav-icon fas bi bi-building"></i>
+                    <p>
+                      Cooperativa
+                      <i className="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul className="nav nav-treeview" style={{ display: isEmployeeMenuOpen ? "block" : "none" }}>
+                    <li className="nav-item" style={{ textAlign: "left" }}>
+                      <Link to="/admin/cooperativa/create" className="nav-link active">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Registrar Cooperativa</p>
+                      </Link>
+                    </li>
+                    <li className="nav-item" style={{ textAlign: "left" }}>
+                      <Link to="/admin/cooperativa" className="nav-link active">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Lista de Cooperativas</p>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
               {/* Salir */}
               <li className="nav-item" style={{ textAlign: "left" }}>
                 <a className="nav-link" href="/" onClick={handleLogout}>
