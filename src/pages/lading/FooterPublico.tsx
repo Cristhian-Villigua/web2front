@@ -5,7 +5,7 @@ function FooterPublico() {
     <footer>
       <div className="contenedor-footer">
         <div className="content-foo">
-          <img src="img/sisdeboleteria.png" alt="AgriView Logo" />
+          <img src="img/sisdeboleteria.png" alt="Bustrip Logo" />
           <p>Más facil imposible</p>
         </div>
         <div className="content-foo">

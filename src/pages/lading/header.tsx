@@ -20,7 +20,7 @@ function HeaderPublico() {
   return (
     <header>
       <div className="navlist">
-        <img className="Logo" src="/img/sisdeboleteria.png" alt="AgriView Logo" />
+        <img className="Logo" src="/img/sisdeboleteria.png" alt="Bustrip Logo" />
         <nav>
           <Link to="/">Inicio</Link>
           {isLoggedIn ? (
