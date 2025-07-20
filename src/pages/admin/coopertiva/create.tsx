@@ -49,33 +49,39 @@ const CreateCooperativa: React.FC = () => {
         );
       }
 
+    if (response.statusCode === 200 || response.statusCode === 201) {
       Swal.fire({
         icon: "success",
         title: "Cooperativa creada",
         text: "La cooperativa se registró correctamente.",
-      });
-
-      setTimeout(() => {
-        navigate("/admin/cooperativa");
-      }, 1500);
-    } catch (err: any) {
-      console.error(err);
-      if (err.response?.data?.errors) {
-        setErrors(err.response.data.errors);
-        Swal.fire({
-          icon: "error",
-          title: "Error de validación",
-          text: "Revisa los campos en rojo.",
-        });
-      } else {
-        setServerError(err.response?.data?.message || "Error del servidor");
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: serverError || "Ocurrió un error al crear la cooperativa.",
-        });
-      }
-    }
+    });
+    setTimeout(() => {
+      navigate("/admin/cooperativa");
+    }, 2000);
+    } else if (response.data && response.data.errors) {
+      setErrors(response.data.errors);
+      Swal.fire({
+        icon: "error",
+        title: "Error de validación",
+        text: "Revisa los campos marcados en rojo.",
+    });
+    } else if (response.data && response.data.message) {
+      setServerError(response.data.message);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: response.data.message,
+    });
+  }
+  } catch (err: any) {
+    console.error(err);
+    setServerError("Error al crear cooperativa");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Error al crear cooperativa",
+    });
+}
   };
 
   return (

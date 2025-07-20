@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Api } from "../../services/Api";
 import AdminLayout from "../layout/Index";
 import { useEffect, useState } from "react";
@@ -8,6 +9,8 @@ const Index = () => {
   const [totalProviders, setTotalProviders] = useState<number>(0);
   const [totalUsuarios, setTotalUsuarios] = useState<number>(0);
   const [totalCooperativa, setTotalCooperativa] = useState<number>(0);
+  const [totalBuses, setTotalBuses] = useState<number>(0);
+  const [totalRutas, setTotalRutas] = useState<number>(0);
   const [username, setUsername] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
 
@@ -36,12 +39,14 @@ const Index = () => {
       },
     })
       .then((response) => {
-        const { admin, empleados, proveedores, usuarios, cooperativa } = response.data;
+        const { admin, empleados, proveedores, usuarios, cooperativa, buses, rutas } = response.data;
         setTotaladmin(admin);
         setTotalEmployees(empleados);
         setTotalProviders(proveedores);
         setTotalUsuarios(usuarios);
         setTotalCooperativa(cooperativa);
+        setTotalBuses(buses);
+        setTotalRutas(rutas);
       })
       .catch((err) => {
         console.error("Error al obtener conteos:", err);
@@ -67,9 +72,9 @@ const Index = () => {
                 <div className="icon">
                   <i className="fas bi bi-file-person" />
                 </div>
-                <a href="/admin/users" className="small-box-footer">
+                <Link to="/admin/users" className="small-box-footer">
                   Más información <i className="fas bi bi-file-person" />
-                </a>
+                </Link>
               </div>
             </div>
           )}
@@ -85,9 +90,9 @@ const Index = () => {
                 <div className="icon">
                   <i className="fas bi bi-person-circle" />
                 </div>
-                <a href="/admin/providers" className="small-box-footer">
+                <Link to="/admin/providers" className="small-box-footer">
                   Más información <i className="fas bi bi-person-circle" />
-                </a>
+                </Link>
               </div>
             </div>
           )}
@@ -102,9 +107,9 @@ const Index = () => {
                 <div className="icon">
                   <i className="fas bi bi-person-fill-check" />
                 </div>
-                <a href="/admin/employees" className="small-box-footer">
+                <Link to="/admin/employees" className="small-box-footer">
                   Más información <i className="fas bi bi-person-fill-check" />
-                </a>
+                </Link>
               </div>
             </div>
           )}
@@ -118,9 +123,9 @@ const Index = () => {
                 <div className="icon">
                   <i className="fas bi bi-person-fill" />
                 </div>
-                <a href="/admin/usuarios" className="small-box-footer">
+                <Link to="/admin/usuarios" className="small-box-footer">
                   Más información <i className="fas bi bi-person-fill" />
-                </a>
+                </Link>
               </div>
             </div>
           )}
@@ -134,9 +139,41 @@ const Index = () => {
                 <div className="icon">
                   <i className="fas bi bi-building" />
                 </div>
-                <a href="/admin/cooperativa" className="small-box-footer">
+                <Link to="/admin/cooperativa" className="small-box-footer">
                   Más información <i className="fas bi bi-building" />
-                </a>
+                </Link>
+              </div>
+            </div>
+          )}
+          {(role === "admin" || role === "proveedor") && (
+            <div className="col-lg-3 col-6">
+              <div className="small-box bg-orange">
+                <div className="inner">
+                  <h3>{totalBuses}</h3>
+                  <p>Buses</p>
+                </div>
+                <div className="icon">
+                  <i className="fas bi bi-bus-front" />
+                </div>
+                <Link to="/admin/buses" className="small-box-footer">
+                  Más información <i className="fas bi bi-bus-front" />
+                </Link>
+              </div>
+            </div>
+          )}
+          {(role === "admin" || role === "proveedor") && (
+            <div className="col-lg-3 col-6">
+              <div className="small-box bg-purple">
+                <div className="inner">
+                  <h3>{totalRutas}</h3>
+                  <p>Rutas</p>
+                </div>
+                <div className="icon">
+                  <i className="fas bi bi-signpost" />
+                </div>
+                <Link to="/admin/rutas" className="small-box-footer">
+                  Más información <i className="fas bi bi-signpost" />
+                </Link>
               </div>
             </div>
           )}

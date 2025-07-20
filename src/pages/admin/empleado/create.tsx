@@ -110,7 +110,7 @@ const CreateEmpleado = () => {
         <div className="row">
           <h1>Registrar Empleado</h1>
           <hr />
-          <div className="col-md-6">
+          <div className="col-md-10">
             <div className="card card-outline card-primary">
               <div className="card-header">
                 <h3 className="card-title">Complete los datos</h3>
@@ -120,121 +120,144 @@ const CreateEmpleado = () => {
                   <div style={{ color: "red", marginBottom: 10 }}>{serverError}</div>
                 )}
                 <form onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label>Rol <b>*</b></label>
-                    <input
-                      type="text"
-                      name="role"
-                      className="form-control"
-                      value="empleado"
-                      readOnly
-                    />
+                  <div className="row">
+                    <div className="col-md-8">
+                      <div className="form-group">
+                        <label>Rol <b>*</b></label>
+                        <input
+                          type="text"
+                          name="role"
+                          className="form-control"
+                          value="empleado"
+                          readOnly
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Nombres <b>*</b></label>
-                    <input
-                      type="text"
-                      name="nombres"
-                      className="form-control"
-                      value={form.nombres}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.nombres && <small style={{ color: "red" }}>{errors.nombres}</small>}
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Nombres <b>*</b></label>
+                        <input
+                          type="text"
+                          name="nombres"
+                          className="form-control"
+                          value={form.nombres}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.nombres && <small style={{ color: "red" }}>{errors.nombres}</small>}
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Apellidos <b>*</b></label>
+                        <input
+                          type="text"
+                          name="apellidos"
+                          className="form-control"
+                          value={form.apellidos}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.apellidos && <small style={{ color: "red" }}>{errors.apellidos}</small>}
+                      </div>
+                    </div>
                   </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Apellidos <b>*</b></label>
-                    <input
-                      type="text"
-                      name="apellidos"
-                      className="form-control"
-                      value={form.apellidos}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.apellidos && <small style={{ color: "red" }}>{errors.apellidos}</small>}
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Cédula <b>*</b></label>
+                        <input
+                          type="text"
+                          name="cedula"
+                          className="form-control"
+                          value={form.cedula}
+                          onChange={handleChange}
+                          
+                          required
+                        />
+                        {errors.cedula && <small style={{ color: "red" }}>{errors.cedula}</small>}
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="form-group">
+                          <label>Celular <b>*</b></label>
+                          <input
+                            type="text"
+                            name="celular"
+                            className="form-control"
+                            value={form.celular}
+                            onChange={handleChange}
+                            
+                            required
+                          />
+                          {errors.celular && <small style={{ color: "red" }}>{errors.celular}</small>}
+                        </div>
+                    </div>
+                  </div>              
+                  
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Dirección <b>*</b></label>
+                        <input
+                          type="text"
+                          name="dirrecion"
+                          className="form-control"
+                          value={form.dirrecion}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.dirrecion && <small style={{ color: "red" }}>{errors.dirrecion}</small>}
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Email <b>*</b></label>
+                        <input
+                          type="email"
+                          name="email"
+                          className="form-control"
+                          value={form.email}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.email && <small style={{ color: "red" }}>{errors.email}</small>}
+                      </div>
+                    </div>
                   </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Cédula <b>*</b></label>
-                    <input
-                      type="text"
-                      name="cedula"
-                      className="form-control"
-                      value={form.cedula}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.cedula && <small style={{ color: "red" }}>{errors.cedula}</small>}
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Celular <b>*</b></label>
-                    <input
-                      type="text"
-                      name="celular"
-                      className="form-control"
-                      value={form.celular}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.celular && <small style={{ color: "red" }}>{errors.celular}</small>}
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Dirección <b>*</b></label>
-                    <input
-                      type="text"
-                      name="dirrecion"
-                      className="form-control"
-                      value={form.dirrecion}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.dirrecion && <small style={{ color: "red" }}>{errors.dirrecion}</small>}
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Email <b>*</b></label>
-                    <input
-                      type="email"
-                      name="email"
-                      className="form-control"
-                      value={form.email}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.email && <small style={{ color: "red" }}>{errors.email}</small>}
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Contraseña <b>*</b></label>
-                    <input
-                      type="password"
-                      name="password"
-                      className="form-control"
-                      value={form.password}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.password && <small style={{ color: "red" }}>{errors.password}</small>}
-                  </div>
-                  <br />
-                  <div className="form-group">
-                    <label>Confirmar Contraseña <b>*</b></label>
-                    <input
-                      type="password"
-                      name="password_confirmation"
-                      className="form-control"
-                      value={form.password_confirmation}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.password_confirmation && (
-                      <small style={{ color: "red" }}>{errors.password_confirmation}</small>
-                    )}
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Contraseña <b>*</b></label>
+                        <input
+                          type="password"
+                          name="password"
+                          className="form-control"
+                          value={form.password}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.password && <small style={{ color: "red" }}>{errors.password}</small>}
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Confirmar Contraseña <b>*</b></label>
+                        <input
+                          type="password"
+                          name="password_confirmation"
+                          className="form-control"
+                          value={form.password_confirmation}
+                          onChange={handleChange}
+                          required
+                        />
+                        {errors.password_confirmation && (
+                          <small style={{ color: "red" }}>{errors.password_confirmation}</small>
+                        )}
+                      </div>
+                    </div>
                   </div>
                   <hr />
                   <div className="form-group">

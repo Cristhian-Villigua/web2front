@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
   <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -6,7 +8,7 @@ function Header() {
       <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars" /></a>
     </li>
     <li className="nav-item d-none d-sm-inline-block">
-      <a href="/admin" className="nav-link">Sistemas de Reservas de Boletería</a>
+      <Link to="/admin" className="nav-link">Sistemas de Reservas de Boletería</Link>
     </li>
   </ul>
   <ul className="navbar-nav ml-auto">

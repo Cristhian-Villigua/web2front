@@ -10,7 +10,7 @@ interface Props {
 const ProtectedRoute: React.FC<Props> = ({ children, allowedRoles }) => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   if (!user?.role || !allowedRoles.includes(user.role)) {
-    return <Navigate to="/Login" replace />;
+    return <Navigate to="/" replace />;
   }
   return <>{children}</>;
 };

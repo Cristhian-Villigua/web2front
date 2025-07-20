@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../../layout/Index";
 import { Api } from "../../../services/Api";
+import { Link } from "react-router-dom";
 
 interface Usuario {
   id: number;
@@ -113,24 +114,24 @@ const UsuarioList: React.FC = () => {
                         <td>{usuario.dirrecion}</td>
                         <td>
                           <div className="btn-group" role="group" aria-label="Basic example">
-                            <a
-                              href={`/admin/usuarios/${usuario.id}`}
+                            <Link
+                              to={`/admin/usuarios/${usuario.id}`}
                               className="btn btn-info btn-sm"
                             >
                               <i className="bi bi-eye-fill"></i>
-                            </a>
-                            <a
-                              href={`/admin/usuarios/${usuario.id}/edit`}
+                            </Link>
+                            <Link
+                              to={`/admin/usuarios/${usuario.id}/edit`}
                               className="btn btn-success btn-sm"
                             >
                               <i className="bi bi-pencil"></i>
-                            </a>
-                            <a
-                              href={`/admin/usuarios/${usuario.id}/confirm-delete`}
+                            </Link>
+                            <Link
+                              to={`/admin/usuarios/${usuario.id}/confirm-delete`}
                               className="btn btn-danger btn-sm"
                             >
                               <i className="bi bi-trash"></i>
-                            </a>
+                            </Link>
                           </div>
                         </td>
                       </tr>

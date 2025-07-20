@@ -29,6 +29,16 @@ import CreateCooperativa from "../pages/admin/coopertiva/create";
 import ShowCooperativa from "../pages/admin/coopertiva/show";
 import EditCooperativa from "../pages/admin/coopertiva/edit";
 import DeleteCooperativa from "../pages/admin/coopertiva/delete";
+import BusList from "../pages/admin/bus";
+import CreateBus from "../pages/admin/bus/create";
+import ShowBus from "../pages/admin/bus/show";
+import EditBus from "../pages/admin/bus/edit";
+import DeleteBus from "../pages/admin/bus/delete";
+import RutaList from "../pages/admin/rutas";
+import CreateRuta from "../pages/admin/rutas/create";
+import ShowRuta from "../pages/admin/rutas/show";
+import EditRuta from "../pages/admin/rutas/edit";
+import DeleteRuta from "../pages/admin/rutas/delete";
 
 export const routes = [
     {
@@ -223,6 +233,76 @@ export const routes = [
         element: (
             <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
                 <DeleteCooperativa />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/buses',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <BusList />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/buses/create',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <CreateBus />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/buses/:id',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <ShowBus />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/buses/:id/edit',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <EditBus />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/buses/:id/confirm-delete',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <DeleteBus />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/rutas',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <RutaList />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/rutas/create',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <CreateRuta />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/rutas/:id',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <ShowRuta />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/rutas/:id/edit',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <EditRuta />
+            </ProtectedRoute>
+        ),
+    },{
+        path: '/admin/rutas/:id/confirm-delete',
+        element: (
+            <ProtectedRoute allowedRoles={["admin", "proveedor"]}>
+                <DeleteRuta />
             </ProtectedRoute>
         ),
     },{

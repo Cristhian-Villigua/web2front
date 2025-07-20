@@ -8,6 +8,8 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isProvidersMenuOpen, setIsProvidersMenuOpen] = useState(false);
   const [isEmployeeMenuOpen, setIsEmployeeMenuOpen] = useState(false);
   const [isUsarioMenuOpen, setIsUsuarioMenuOpen] = useState(false);
+  const [isBusesMenuOpen, setIsBusesMenuOpen] = useState(false);
+  const [isRutasMenuOpen, setIsRutasMenuOpen] = useState(false);
   const [isCooperativaMenuOpen, setIsCooperativaMenuOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="sidebar">
           <div className="user-panel mt-3 pb-3 mb-3 d-flex">
             <div className="info">
-              <a href="/admin" className="d-block" style={{ textDecoration: "none", marginLeft: 60, fontSize: 18, color: "white", fontWeight:800 }}>INICIO</a>
+              <Link to="/admin" className="d-block" style={{ textDecoration: "none", marginLeft: 60, fontSize: 18, color: "white", fontWeight:800 }}>INICIO</Link>
             </div>
           </div>
           <nav className="mt-2" style={{ paddingRight: 10 }}>
@@ -171,6 +173,56 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                       <Link to="/admin/cooperativa" className="nav-link active">
                         <i className="far fa-circle nav-icon"></i>
                         <p>Lista de Cooperativas</p>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+              {(role === "admin" || role === "proveedor") && (
+                <li className={`nav-item has-treeview ${isBusesMenuOpen ? 'menu-open' : ''}`}>
+                  <a className="nav-link active" style={{ cursor: "pointer", textAlign: "left" }} onClick={() => setIsBusesMenuOpen(!isBusesMenuOpen)}>
+                    <i className="nav-icon fas bi-bus-front"></i>
+                    <p>
+                      Buses
+                      <i className="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul className="nav nav-treeview" style={{ display: isBusesMenuOpen ? "block" : "none" }}>
+                    <li className="nav-item" style={{ textAlign: "left" }}>
+                      <Link to="/admin/buses/create" className="nav-link active">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Registrar Buses</p>
+                      </Link>
+                    </li>
+                    <li className="nav-item" style={{ textAlign: "left" }}>
+                      <Link to="/admin/buses" className="nav-link active">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Lista de Buses</p>
+                      </Link>
+                    </li>
+                  </ul>
+                </li>
+              )}
+              {(role === "admin" || role === "proveedor") && (
+                <li className={`nav-item has-treeview ${isRutasMenuOpen ? 'menu-open' : ''}`}>
+                  <a className="nav-link active" style={{ cursor: "pointer", textAlign: "left" }} onClick={() => setIsRutasMenuOpen(!isRutasMenuOpen)}>
+                    <i className="nav-icon fas bi-signpost"></i>
+                    <p>
+                      Rutas
+                      <i className="right fas fa-angle-left"></i>
+                    </p>
+                  </a>
+                  <ul className="nav nav-treeview" style={{ display: isRutasMenuOpen ? "block" : "none" }}>
+                    <li className="nav-item" style={{ textAlign: "left" }}>
+                      <Link to="/admin/rutas/create" className="nav-link active">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Registrar Rutas</p>
+                      </Link>
+                    </li>
+                    <li className="nav-item" style={{ textAlign: "left" }}>
+                      <Link to="/admin/rutas" className="nav-link active">
+                        <i className="far fa-circle nav-icon"></i>
+                        <p>Lista de Rutas</p>
                       </Link>
                     </li>
                   </ul>

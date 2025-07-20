@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../../layout/Index";
 import { Api } from "../../../services/Api";
+import { Link } from "react-router-dom";
 
 interface User {
   id: number;
@@ -99,9 +100,9 @@ const UserList: React.FC = () => {
           <div className="card card-outline card-primary">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h3 className="card-title">Listado de Administradores</h3>
-              <a href="/admin/users/create" className="btn btn-primary ms-auto">
+              <Link to="/admin/users/create" className="btn btn-primary ms-auto">
                 Añadir
-              </a>
+              </Link>
             </div>
             <div className="card-body">
               <table
@@ -126,24 +127,24 @@ const UserList: React.FC = () => {
                       <td>{usuario.email}</td>
                       <td>
                         <div className="btn-group" role="group" aria-label="Basic example">
-                          <a
-                            href={`/admin/users/${usuario.id}`}
+                          <Link
+                            to={`/admin/users/${usuario.id}`}
                             className="btn btn-info btn-sm"
                           >
                             <i className="bi bi-eye-fill"></i>
-                          </a>
-                          <a
-                            href={`/admin/users/${usuario.id}/edit`}
+                          </Link>
+                          <Link
+                            to={`/admin/users/${usuario.id}/edit`}
                             className="btn btn-success btn-sm"
                           >
                             <i className="bi bi-pencil"></i>
-                          </a>
-                          <a
-                            href={`/admin/users/${usuario.id}/confirm-delete`}
+                          </Link>
+                          <Link
+                            to={`/admin/users/${usuario.id}/confirm-delete`}
                             className="btn btn-danger btn-sm"
                           >
                             <i className="bi bi-trash"></i>
-                          </a>
+                          </Link>
                         </div>
                       </td>
                     </tr>
