@@ -39,6 +39,8 @@ import CreateRuta from "../pages/admin/rutas/create";
 import ShowRuta from "../pages/admin/rutas/show";
 import EditRuta from "../pages/admin/rutas/edit";
 import DeleteRuta from "../pages/admin/rutas/delete";
+import CuentaCliente from "../pages/client/cuenta/cuentacliente";
+import Metodospagoscliente from "../pages/client/cuenta/metodospagos";
 
 export const routes = [
     {
@@ -315,5 +317,21 @@ export const routes = [
         children: [
             
         ]
+    },
+    {
+        path: '/micuenta',
+        element:(
+            <ProtectedRoute allowedRoles={["usuario"]}> 
+                <CuentaCliente />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/metodosdepago',
+        element:(
+            <ProtectedRoute allowedRoles={["usuario"]}> 
+                <Metodospagoscliente />
+            </ProtectedRoute>
+        ),
     },
 ];

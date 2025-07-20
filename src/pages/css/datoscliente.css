@@ -1,0 +1,141 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f7f8fa;
+  color: #333;
+}
+
+/* Contenedor principal */
+.contenedorCuenta {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Encabezados */
+.bodycuenta h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.titulocuenta h2,
+.titulofacturacioncliente h2 {
+  font-size: 1.4rem;
+  color: #34495e;
+  margin-bottom: 8px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+/* Secciones de datos */
+.datoscuenta,
+.bodyfacturacioncliente {
+  margin-bottom: 30px;
+}
+
+.datoscuenta h3,
+.bodyfacturacioncliente h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3436;
+  margin-top: 16px;
+}
+
+.datoscuenta p,
+.bodyfacturacioncliente p {
+  font-size: 0.95rem;
+  color: #636e72;
+  margin-top: 4px;
+}/* Contenedor principal */
+.metodosdepago {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.metodosdepago h1 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  text-align: center;
+}
+.metodosdepago h2 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Sección de tarjetas */
+.tarjetas {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tarjetas h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 4px;
+}
+.tarjetaschild{
+  flex: 1 1 0;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .metodosdepago {
+    padding: 20px;
+  }
+
+  .metodosdepago h1 {
+    font-size: 1.5rem;
+  }
+}
+
+
+/* Espaciado responsive */
+@media (max-width: 600px) {
+  .contenedorCuenta {
+    padding: 20px;
+  }
+
+  .bodycuenta h1 {
+    font-size: 1.5rem;
+  }
+
+  .titulocuenta h2,
+  .titulofacturacioncliente h2 {
+    font-size: 1.2rem;
+  }
+}
