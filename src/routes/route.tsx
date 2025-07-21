@@ -41,6 +41,8 @@ import EditRuta from "../pages/admin/rutas/edit";
 import DeleteRuta from "../pages/admin/rutas/delete";
 import CuentaCliente from "../pages/client/cuenta/cuentacliente";
 import Metodospagoscliente from "../pages/client/cuenta/metodospagos";
+import Mostrarpasajes from "../pages/client/reservas/mostrarpasajes";
+import GenerarReserva from "../pages/client/facturacion/generarreserva";
 
 export const routes = [
     {
@@ -333,5 +335,13 @@ export const routes = [
                 <Metodospagoscliente />
             </ProtectedRoute>
         ),
+    },
+    {
+        path: '/mostarpasajes',
+        element: <Mostrarpasajes/> 
+    },
+    {
+        path: '/facturacion',
+        element: <GenerarReserva/> 
     },
 ];

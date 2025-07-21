@@ -5,7 +5,7 @@ import '../css/FAQ.css';
 export interface FAQItem {
   id: number;
   question: string;
-  answer: string; // This would typically be longer text
+  answer: string;
 }
 
 export const faqs: FAQItem[] = [
@@ -37,8 +37,6 @@ export const faqs: FAQItem[] = [
 ];
 
 const FAQModule: React.FC = () => {
-  // State to manage which FAQ item is open.
-  // Stores the ID of the currently open item, or null if none are open.
   const [openItemId, setOpenItemId] = useState<number | null>(null);
 
   const toggleFAQ = (id: number) => {
