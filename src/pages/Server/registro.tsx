@@ -6,7 +6,8 @@ import { Api } from "../../services/Api";
 import "../css/ingreso.css";
 
 interface FormValues {
-  name: string;
+  nombres: string;
+  apellidos: string;
   email: string;
   password: string;
   password_confirmation: string;
@@ -17,16 +18,20 @@ const SignUpForm: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState("");
 
   const initialValues: FormValues = {
-    name: "",
+    nombres: "",
+    apellidos: "",
     email: "",
     password: "",
     password_confirmation: ""
   };
 
   const validationSchema = Yup.object({
-    name: Yup.string()
+    nombres: Yup.string()
       .min(3, "El nombre debe tener mínimo tres letras.")
       .required("El nombre es requerido"),
+    apellidos: Yup.string()
+      .min(3, "Los apellidos debe tener mínimo tres letras.")
+      .required("Los apellidos son requeridos"),
     email: Yup.string()
       .email("El correo no es válido")
       .required("El correo es requerido"),
@@ -69,14 +74,26 @@ return (
         
         <input
           type="text"
-          name="name"
+          name="nombres"
           placeholder="Nombre"
-          value={formik.values.name}
+          value={formik.values.nombres}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
-        {formik.touched.name && formik.errors.name && (
-          <div className="error">{formik.errors.name}</div>
+        {formik.touched.nombres && formik.errors.nombres && (
+          <div className="error">{formik.errors.nombres}</div>
+        )}
+
+        <input
+          type="text"
+          name="apellidos"
+          placeholder="Apellidos"
+          value={formik.values.apellidos  }
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+        />
+        {formik.touched.apellidos && formik.errors.apellidos && (
+          <div className="error">{formik.errors.apellidos}</div>
         )}
 
         <input
