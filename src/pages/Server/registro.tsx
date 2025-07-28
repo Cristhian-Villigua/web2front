@@ -52,7 +52,7 @@ const SignUpForm: React.FC = () => {
 
       if (response.data?.token) {
         localStorage.setItem("token", response.data.token);
-        navigate("/login");
+        navigate("/");
       } else if (response.data?.message) {
         setErrorMsg(response.data.message);
       }
