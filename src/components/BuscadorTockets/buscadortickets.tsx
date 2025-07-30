@@ -1,12 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './BuscadorTickets.css'; // For styling
 
+interface Ruta {
+    origen: string;
+    destino: string;
+}
+
 const Buscadortickets = () => {
+    const navigate = useNavigate();
+
     // State for tabs
     const [activeTab, setActiveTab] = useState('roundTrip'); // 'roundTrip', 'oneWay'
 
     // State for origin and destination inputs
-    const [origin, setOrigin] = useState('Manta, Manabí, Ecuador');
+    const [origin, setOrigin] = useState('');
     const [destination, setDestination] = useState('');
 
     // State for dates (you'd likely use a date picker library for real-world)
@@ -19,23 +27,47 @@ const Buscadortickets = () => {
     // State for toggle switches
     const [seniorsOrDisabled, setSeniorsOrDisabled] = useState(false);
 
+    // State for rutas fetched from API
+    const [rutas, setRutas] = useState<Ruta[]>([]);
+
+    // Unique origins and destinations extracted from rutas
+    const [uniqueOrigins, setUniqueOrigins] = useState<string[]>([]);
+    const [uniqueDestinations, setUniqueDestinations] = useState<string[]>([]);
+
+    useEffect(() => {
+        // Fetch rutas from API using base URL from environment variable
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+        fetch(`${baseUrl}/api/destinos/rutas`)
+            .then(response => response.json())
+            .then((data: Ruta[]) => {
+                setRutas(data);
+                // Extract unique origins and destinations
+                const originsSet = new Set<string>();
+                const destinationsSet = new Set<string>();
+                data.forEach((ruta: Ruta) => {
+                    if (ruta.origen) originsSet.add(ruta.origen);
+                    if (ruta.destino) destinationsSet.add(ruta.destino);
+                });
+                setUniqueOrigins(Array.from(originsSet));
+                setUniqueDestinations(Array.from(destinationsSet));
+            })
+            .catch(error => {
+                console.error('Error fetching rutas:', error);
+            });
+    }, []);
+
     const handleSwapLocations = () => {
         setOrigin(destination);
         setDestination(origin);
     };
 
     const handleSearch = () => {
-        // Implement search logic here
-        console.log({
-            activeTab,
-            origin,
-            destination,
-            departureDate,
-            returnDate,
-            passengers,
-            seniorsOrDisabled,
-        });
-        alert('Searching for flights!');
+        // Redirect to /mostarpasajes with query params
+        const params = new URLSearchParams();
+        if (origin) params.append('origin', origin);
+        if (destination) params.append('destination', destination);
+        if (departureDate) params.append('departureDate', departureDate);
+        navigate(`/mostarpasajes?${params.toString()}`);
     };
 
     return (
@@ -61,25 +93,30 @@ const Buscadortickets = () => {
             <div className="search-form-grid">
                 <div className="input-group origin">
                     <label>ORIGEN</label>
-                    <input
-                        type="text"
-                        placeholder="Origen"
+                    <select
                         value={origin}
                         onChange={(e) => setOrigin(e.target.value)}
-                    />
+                    >
+                        <option value="">Seleccione origen</option>
+                        {uniqueOrigins.map((orig) => (
+                            <option key={orig} value={orig}>{orig}</option>
+                        ))}
+                    </select>
                 </div>
                 <button className="swap-button" onClick={handleSwapLocations}>
-                    {/* SVG or Font Awesome icon for swap */}
                     &#x21C6; {/* Unicode for Left Right Arrow */}
                 </button>
                 <div className="input-group destination">
                     <label>DESTINO</label>
-                    <input
-                        type="text"
-                        placeholder="Destino."
+                    <select
                         value={destination}
                         onChange={(e) => setDestination(e.target.value)}
-                    />
+                    >
+                        <option value="">Seleccione destino</option>
+                        {uniqueDestinations.map((dest) => (
+                            <option key={dest} value={dest}>{dest}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="input-group dates">
@@ -88,7 +125,7 @@ const Buscadortickets = () => {
                         <div className="date-input">
                             <span className="calendar-icon">📅</span>
                             <input
-                                type="text" // Or date type if using native, but usually handled by date picker lib
+                                type="date"
                                 placeholder="Ida"
                                 value={departureDate}
                                 onChange={(e) => setDepartureDate(e.target.value)}
@@ -98,7 +135,7 @@ const Buscadortickets = () => {
                              <div className="date-input">
                                 <span className="calendar-icon">📅</span>
                                 <input
-                                    type="text"
+                                    type="date"
                                     placeholder="Vuelta"
                                     value={returnDate}
                                     onChange={(e) => setReturnDate(e.target.value)}

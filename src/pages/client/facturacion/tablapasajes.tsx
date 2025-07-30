@@ -1,6 +1,19 @@
 import "../../css/tablapasajes.css";
 
-const TablaPasajes = () => {
+interface Ruta {
+    origen: string;
+    destino: string;
+    fechaSalida: string;
+    cantidadPasajes: number;
+    precioFinal: number;
+    cooperativaNombre: string;
+}
+
+interface TablaPasajesProps {
+    ruta: Ruta;
+}
+
+const TablaPasajes = ({ ruta }: TablaPasajesProps) => {
   return (
     <div className="contenedorPasajes">
       <div className="bodyPasajes">
@@ -12,27 +25,27 @@ const TablaPasajes = () => {
         <div className="tituloSeccion">
           <h2>Cooperativa</h2>
         </div>
-        <p>Vuelta larga</p>
+        <p>{ruta.cooperativaNombre}</p>
 
         <div className="pasajesRow">
           <div className="pasajesItem">
             <h3>Salida</h3>
-            <p>Manta-Manabi</p>
+            <p>{ruta.origen}</p>
           </div>
           <div className="pasajesItem">
             <h3>Destino</h3>
-            <p>Santa Ana-Manabi</p>
+            <p>{ruta.destino}</p>
           </div>
         </div>
 
         <div className="pasajesRow">
           <div className="pasajesItem">
             <h3>Cantidad de pasajes</h3>
-            <p>1</p>
+            <p>{ruta.cantidadPasajes}</p>
           </div>
           <div className="pasajesItem">
             <h3>Precio final</h3>
-            <p>$2.50</p>
+            <p>${ruta.precioFinal.toFixed(2)}</p>
           </div>
         </div>
       </div>
