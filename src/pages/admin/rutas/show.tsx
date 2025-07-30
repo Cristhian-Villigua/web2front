@@ -23,6 +23,7 @@ interface Ruta {
   duracion: string;
   fechaSalida: string;
   horaSalida: string;
+  precio: number;
   cooperativa: Cooperativa;
   bus: Bus;
 }
@@ -93,7 +94,6 @@ const ShowRuta: React.FC = () => {
     );
   }
 
-  // Si todo está bien, mostramos los detalles de la ruta
   return (
     <AdminLayout>
       <div className="row">
@@ -187,6 +187,17 @@ const ShowRuta: React.FC = () => {
                     <input
                       type="time"
                       value={ruta.horaSalida}
+                      className="form-control"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div className="col-md-5">
+                  <div className="form-group">
+                    <label>Precio</label>
+                    <input
+                      type="text"
+                      value={ruta.precio}
                       className="form-control"
                       disabled
                     />

@@ -23,6 +23,7 @@ interface Ruta {
   duracion: string;
   fechaSalida: string;
   horaSalida: string;
+  precio: number;
   cooperativa: Cooperativa;
   bus?: Bus;
 }
@@ -63,7 +64,7 @@ const DeleteRuta: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.status === 200 || response.status === 204) {
+      if (response.statusCode === 200) {
         Swal.fire({
           icon: "success",
           title: "Ruta eliminada",
@@ -142,9 +143,10 @@ const DeleteRuta: React.FC = () => {
               <form onSubmit={handleDelete}>
                 {[{ label: "Origen", value: ruta.origen },
                   { label: "Destino", value: ruta.destino },
-                  { label: "Duración", value: ruta.duracion },
+                  { label: "Duración", value: ruta.duracion?.slice(0, 5) || "No especificada" },
                   { label: "Fecha de salida", value: ruta.fechaSalida },
-                  { label: "Hora de salida", value: ruta.horaSalida || "No especificada" }]
+                  { label: "Hora de salida", value: ruta.horaSalida?.slice(0, 5) || "No especificada"},
+                  { label: "Precio", value: ruta.precio}]
                   .map((field, index) => (
                     <div className="form-group" key={index}>
                       <label>{field.label}</label>

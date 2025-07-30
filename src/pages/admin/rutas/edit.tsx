@@ -18,19 +18,33 @@ interface Cooperativa {
   buses: Bus[];
 }
 
+interface FormState {
+  origen: string;
+  destino: string;
+  duracion: string;
+  fechaSalida: string;
+  horaSalida: string;
+  precio: string;
+  cooperativa_id: string;
+  bus_id: string;
+}
+
+const initialFormState: FormState = {
+  origen: "",
+  destino: "",
+  duracion: "",
+  fechaSalida: "",
+  horaSalida: "",
+  precio: "",
+  cooperativa_id: "",
+  bus_id: "",
+};
+
 const EditRuta: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    origen: "",
-    destino: "",
-    duracion: "",
-    fechaSalida: "",
-    horaSalida: "",
-    cooperativa_id: "",
-    bus_id: "",
-  });
 
+  const [form, setForm] = useState<FormState>(initialFormState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [serverError, setServerError] = useState<string>("");
   const [cooperativas, setCooperativas] = useState<Cooperativa[]>([]);
@@ -41,89 +55,107 @@ const EditRuta: React.FC = () => {
   useEffect(() => {
     if (!token) return;
 
-    Api.get("/cooperativa/cooperativa", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
+    // Cargar cooperativas
+    const fetchCooperativas = async () => {
+      try {
+        const res = await Api.get("/cooperativa/cooperativa", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const data = res.data;
         if (Array.isArray(data)) {
           setCooperativas(data);
-        } else if (data && typeof data.id !== "undefined") {
+        } else if (data && data.id) {
           setCooperativas([data]);
-          setForm((prevForm) => ({
-            ...prevForm,
-            cooperativa_id: data.id.toString(),
-          }));
+          setForm((prev) => ({ ...prev, cooperativa_id: data.id.toString() }));
         }
-      })
-      .catch((err) => console.error("Error al cargar cooperativas", err));
+      } catch (error) {
+        console.error("Error al cargar cooperativas", error);
+      }
+    };
 
-    if (id) {
-      Api.get(`/rutas/rutas/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((response) => {
-          const ruta = response.data;
-          setForm({
-            origen: ruta.origen || "",
-            destino: ruta.destino || "",
-            duracion: ruta.duracion || "",
-            fechaSalida: ruta.fechaSalida || "",
-            horaSalida: ruta.horaSalida || "",
-            cooperativa_id: ruta.cooperativa_id.toString(),
-            bus_id: ruta.bus_id.toString(),
-          });
-        })
-        .catch((err) => {
-          console.error("Error al cargar ruta para editar", err);
-          navigate("/admin/rutas");
+    // Cargar ruta para editar
+    const fetchRuta = async () => {
+      if (!id) return;
+      try {
+        const res = await Api.get(`/rutas/rutas/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-    }
+        const ruta = res.data;
+        setForm({
+          origen: ruta.origen || "",
+          destino: ruta.destino || "",
+          duracion: ruta.duracion ? ruta.duracion.substring(0, 5) : "",
+          fechaSalida: ruta.fechaSalida || "",
+          horaSalida: ruta.horaSalida ? ruta.horaSalida.substring(0, 5) : "",
+          precio: ruta.precio?.toString() || "",
+          cooperativa_id: ruta.cooperativa_id.toString(),
+          bus_id: ruta.bus_id.toString(),
+        });
+      } catch (error) {
+        console.error("Error al cargar ruta para editar", error);
+        navigate("/admin/rutas");
+      }
+    };
+
+    fetchCooperativas();
+    fetchRuta();
   }, [id, token, navigate]);
 
+  // Actualizar busPreview cuando cambia bus_id o cooperativas
   useEffect(() => {
     const selectedBus = cooperativas
       .flatMap((coop) => coop.buses ?? [])
-      .find((bus) => bus.id === parseInt(form.bus_id));
+      .find((bus) => bus.id === Number(form.bus_id));
     setBusPreview(selectedBus || null);
   }, [form.bus_id, cooperativas]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    // Si cambia la cooperativa, limpiamos el bus
+    // Si cambia cooperativa, limpiar bus y errores relacionados
     if (name === "cooperativa_id") {
-      setForm({
-        ...form,
-        cooperativa_id: value,
-        bus_id: "", // Limpiamos bus al cambiar cooperativa
-      });
-      setErrors({ ...errors, cooperativa_id: "", bus_id: "" });
+      setForm((prev) => ({ ...prev, cooperativa_id: value, bus_id: "" }));
+      setErrors((prev) => ({ ...prev, cooperativa_id: "", bus_id: "" }));
       setServerError("");
     } else {
-      setForm({ ...form, [name]: value });
-      setErrors({ ...errors, [name]: "" });
+      setForm((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
       setServerError("");
     }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: { [key: string]: string } = {};
+    const requiredFields: (keyof FormState)[] = [
+      "origen",
+      "destino",
+      "duracion",
+      "fechaSalida",
+      "horaSalida",
+      "precio",
+      "cooperativa_id",
+      "bus_id",
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!form[field]) {
+        newErrors[field] = "Este campo es obligatorio";
+      }
+    });
+
+    const precioNum = parseFloat(form.precio);
+    if (isNaN(precioNum) || precioNum <= 0) {
+      newErrors.precio = "El precio debe ser un número mayor a 0";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError("");
-    setErrors({});
-
-    const newErrors: { [key: string]: string } = {};
-    // Validar los campos obligatorios
-    ["origen", "destino", "duracion", "fechaSalida", "horaSalida", "cooperativa_id", "bus_id"].forEach((field) => {
-      if (!form[field as keyof typeof form]) {
-        newErrors[field] = "Este campo es obligatorio";
-      }
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       const response = await Api.put(`/rutas/rutas/${id}`, form, {
@@ -137,14 +169,14 @@ const EditRuta: React.FC = () => {
           text: "La ruta fue actualizada exitosamente.",
         });
         setTimeout(() => navigate("/admin/rutas"), 2000);
-      } else if (response.data && response.data.errors) {
+      } else if (response.data?.errors) {
         setErrors(response.data.errors);
         Swal.fire({
           icon: "error",
           title: "Error en la validación",
           text: "Corrija los errores del formulario.",
         });
-      } else if (response.data && response.data.message) {
+      } else if (response.data?.message) {
         setServerError(response.data.message);
         Swal.fire({
           icon: "error",
@@ -152,8 +184,8 @@ const EditRuta: React.FC = () => {
           text: response.data.message,
         });
       }
-    } catch (err: any) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       setServerError("Error al actualizar ruta");
       Swal.fire({
         icon: "error",
@@ -163,8 +195,7 @@ const EditRuta: React.FC = () => {
     }
   };
 
-  // Obtener los buses disponibles de la cooperativa seleccionada
-  const busesDisponibles = cooperativas.find((c) => c.id === parseInt(form.cooperativa_id))?.buses || [];
+  const busesDisponibles = cooperativas.find((c) => c.id === Number(form.cooperativa_id))?.buses || [];
 
   return (
     <AdminLayout>
@@ -177,9 +208,7 @@ const EditRuta: React.FC = () => {
               <h3 className="card-title">Actualizar Datos</h3>
             </div>
             <div className="card-body">
-              {serverError && (
-                <div className="alert alert-danger">{serverError}</div>
-              )}
+              {serverError && <div className="alert alert-danger">{serverError}</div>}
               <form onSubmit={handleSubmit}>
                 {/* Cooperativa y Bus asignado */}
                 <div className="row">
@@ -290,11 +319,26 @@ const EditRuta: React.FC = () => {
                       <input
                         type="time"
                         name="horaSalida"
-                        className="form-control"
+                        className="form-control sin-spinners"
                         value={form.horaSalida}
                         onChange={handleChange}
                       />
                       {errors.horaSalida && <small className="text-danger">{errors.horaSalida}</small>}
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label>Precio *</label>
+                      <input
+                        type="text"
+                        name="precio"
+                        className={`form-control ${errors.precio ? "is-invalid" : ""}`}
+                        step="0.01"
+                        min="0"
+                        value={form.precio}
+                        onChange={handleChange}
+                      />
+                      {errors.precio && <small className="text-danger">{errors.precio}</small>}
                     </div>
                   </div>
                 </div>
@@ -307,11 +351,7 @@ const EditRuta: React.FC = () => {
 
                 <hr />
                 <div className="form-group d-flex">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => navigate("/admin/rutas")}
-                  >
+                  <button type="button" className="btn btn-secondary" onClick={() => navigate("/admin/rutas")}>
                     Cancelar
                   </button>
                   <button type="submit" className="btn btn-primary ms-2">

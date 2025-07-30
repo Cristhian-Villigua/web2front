@@ -23,9 +23,25 @@ interface Ruta {
   duracion: string;
   fechaSalida: string;
   horaSalida: string;
+  precio: number;
   cooperativa: Cooperativa;
-  bus?: Bus;  // <-- Bus asignado directamente en la ruta
+  bus?: Bus; 
 }
+
+// Función para convertir "HH:MM" a "Xh Ymin"
+const formatDuracion = (duracion: string): string => {
+  if (!duracion) return "No especificada";
+
+  const [horasStr, minutosStr] = duracion.split(":");
+  const horas = parseInt(horasStr, 10);
+  const minutos = parseInt(minutosStr, 10);
+
+  let resultado = "";
+  if (horas > 0) resultado += `${horas}h`;
+  if (minutos > 0) resultado += ` ${minutos}min`;
+
+  return resultado.trim();
+};
 
 const RutaList: React.FC = () => {
   const [rutas, setRutas] = useState<Ruta[]>([]);
@@ -113,6 +129,7 @@ const RutaList: React.FC = () => {
                     <th>Duración</th>
                     <th>Fecha Salida</th>
                     <th>Hora Salida</th>
+                    <th>Precio</th> 
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -123,9 +140,12 @@ const RutaList: React.FC = () => {
                       <td>{ruta.bus ? `${ruta.bus.nombre}` : "Sin bus asignado"}</td>
                       <td>{ruta.origen}</td>
                       <td>{ruta.destino}</td>
-                      <td>{ruta.duracion}</td>
+                      <td>{formatDuracion(ruta.duracion)}</td>
                       <td>{ruta.fechaSalida}</td>
-                      <td>{ruta.horaSalida || "No especificada"}</td>
+                      <td>{ruta.horaSalida?.slice(0, 5) || "No especificada"}</td>
+                      <td>
+                         ${(!isNaN(Number(ruta.precio)) ? Number(ruta.precio).toFixed(2) : '0.00')}
+                      </td>
                       <td>
                         <div className="btn-group" role="group">
                           <Link to={`/admin/rutas/${ruta.id}`} className="btn btn-info btn-sm">

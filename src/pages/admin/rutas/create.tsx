@@ -26,6 +26,7 @@ const CreateRuta: React.FC = () => {
     duracion: "",
     fechaSalida: "",
     horaSalida: "",
+    precio: "",
     cooperativa_id: "",
     bus_id: ""
   });
@@ -46,10 +47,8 @@ const CreateRuta: React.FC = () => {
       .then((res) => {
         const data = res.data;
         if (Array.isArray(data)) {
-          // Si devuelve un array de cooperativas
           setCooperativas(data);
         } else if (data && typeof data.id !== "undefined") {
-          // Si devuelve una sola cooperativa
           setCooperativas([data]);
           setForm((prevForm) => ({
             ...prevForm,
@@ -64,7 +63,6 @@ const CreateRuta: React.FC = () => {
       );
   }, [token]);
 
-  // Actualizar vista previa del bus cuando cambie bus_id o cooperativas
   useEffect(() => {
     const selectedBus = cooperativas
       .flatMap(c => c.buses ?? [])
@@ -74,12 +72,19 @@ const CreateRuta: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    // Si cambió cooperativa, limpiar bus_id
+    if (name === "precio") {
+    // Permite solo números con hasta 2 decimales o campo vacío
+    if (value === "" || /^\d*\.?\d{0,2}$/.test(value)) {
+      setForm({ ...form, [name]: value });
+      setErrors({ ...errors, [name]: "" });
+    }
+    return; // importante para no ejecutar lo demás cuando sea precio
+  }
     if (name === "cooperativa_id") {
       setForm({
         ...form,
         cooperativa_id: value,
-        bus_id: "", // Limpiamos bus al cambiar cooperativa
+        bus_id: "",
       });
       setErrors({ ...errors, cooperativa_id: "", bus_id: "" });
       setServerError("");
@@ -90,26 +95,83 @@ const CreateRuta: React.FC = () => {
     }
   };
 
+  // Función para parsear duración humana a HH:MM
+  const parseDuracionHumana = (input: string): string | null => {
+    input = input.toLowerCase().trim();
+
+    // 4:30h o 04:30
+    const matchClock = input.match(/^(\d{1,2}):(\d{2})h?$/);
+    if (matchClock) {
+      const h = parseInt(matchClock[1], 10);
+      const m = parseInt(matchClock[2], 10);
+      if (h < 24 && m < 60) {
+        return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+      }
+    }
+
+    // 4h, 4 h, 4 horas
+    const matchHoras = input.match(/^(\d{1,2})\s*(h|horas?)$/);
+    if (matchHoras) {
+      const h = parseInt(matchHoras[1], 10);
+      return `${h.toString().padStart(2, "0")}:00`;
+    }
+
+    // 4h 30m
+    const matchCombo = input.match(/^(\d{1,2})\s*h(?:oras?)?\s*(\d{1,2})\s*m(?:in)?$/);
+    if (matchCombo) {
+      const h = parseInt(matchCombo[1], 10);
+      const m = parseInt(matchCombo[2], 10);
+      if (m < 60) {
+        return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+      }
+    }
+
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setServerError("");
     setErrors({});
 
     const newErrors: { [key: string]: string } = {};
-    // Validar campos obligatorios
-    ["origen", "destino", "duracion", "fechaSalida", "horaSalida", "cooperativa_id", "bus_id"].forEach(field => {
+
+    // Campos obligatorios
+    ["origen", "destino", "duracion", "fechaSalida", "horaSalida", "precio", "cooperativa_id", "bus_id"].forEach(field => {
       if (!form[field as keyof typeof form]) {
         newErrors[field] = "Este campo es obligatorio";
       }
     });
 
+    // Validar duración y convertir
+    const duracionParseada = parseDuracionHumana(form.duracion);
+    if (!duracionParseada) {
+      newErrors.duracion = "Formato inválido. Ej: 4h, 4:30h, 4 horas, 4h 30m";
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
+    const precioNum = parseFloat(form.precio);
+      if (isNaN(precioNum) || precioNum <= 0) {
+        newErrors.precio = "El precio debe ser un número mayor a 0";
+      }
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
+
+
+    const formToSend = {
+      ...form,
+      duracion: duracionParseada,
+      precio: precioNum, 
+    };
 
     try {
-      const response = await Api.post("/rutas/rutas", form, {
+      const response = await Api.post("/rutas/rutas", formToSend, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -152,7 +214,6 @@ const CreateRuta: React.FC = () => {
     }
   };
 
-  // Buses disponibles de la cooperativa preseleccionada
   const busesDisponibles = cooperativas.find(c => c.id === parseInt(form.cooperativa_id))?.buses || [];
 
   return (
@@ -171,7 +232,6 @@ const CreateRuta: React.FC = () => {
               )}
               <form onSubmit={handleSubmit}>
 
-                {/* Origen */}
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -213,6 +273,7 @@ const CreateRuta: React.FC = () => {
                     </div>
                   </div>
                 </div>
+
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -241,7 +302,7 @@ const CreateRuta: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -252,6 +313,7 @@ const CreateRuta: React.FC = () => {
                         className="form-control"
                         value={form.duracion}
                         onChange={handleChange}
+                        placeholder="0h 0m"
                       />
                       {errors.duracion && <small className="text-danger">{errors.duracion}</small>}
                     </div>
@@ -270,7 +332,7 @@ const CreateRuta: React.FC = () => {
                     </div>
                   </div>
                 </div>
-            
+
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
@@ -285,7 +347,23 @@ const CreateRuta: React.FC = () => {
                       {errors.horaSalida && <small className="text-danger">{errors.horaSalida}</small>}
                     </div>
                   </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label>Precio *</label>
+                      <input
+                        type="text"
+                        name="precio"
+                        className={`form-control ${errors.precio ? "is-invalid" : ""}`}
+                        step="0.01"
+                        min="0"
+                        value={form.precio}
+                        onChange={handleChange}
+                      />
+                      {errors.precio && <small className="text-danger">{errors.precio}</small>}
+                    </div>
+                  </div>
                 </div>
+
                 {busPreview && (
                   <div className="alert alert-info">
                     <strong>Bus asignado:</strong> {busPreview.nombre}
