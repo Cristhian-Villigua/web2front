@@ -4,18 +4,23 @@ import "../../css/datoscliente.css";
 const DatosCliente = () => {
     const [userData, setUserData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [paymentVerified, setPaymentVerified] = useState(false);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    // Local state for card data (not saved)
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardName, setCardName] = useState('');
+    const [cardExpiry, setCardExpiry] = useState('');
 
     useEffect(() => {
         let token = localStorage.getItem('token');
         if (!token) {
-            console.error('No token found in localStorage');
             setError('No authentication token found. Please log in.');
             return;
         }
         token = token.trim().replace(/^"(.*)"$/, '$1'); // Remove quotes if any
-        console.log('Using token:', token);
 
-        // Helper function to decode JWT token payload
         function parseJwt (token: string) {
             try {
                 const base64Url = token.split('.')[1];
@@ -25,18 +30,15 @@ const DatosCliente = () => {
                 }).join(''));
                 return JSON.parse(jsonPayload);
             } catch (e) {
-                console.error('Failed to parse JWT token', e);
                 return null;
             }
         }
         const payload = parseJwt(token);
         if (!payload || !payload.sub) {
-            console.error('Invalid token payload or missing sub');
             setError('Invalid authentication token. Please log in again.');
             return;
         }
         const userId = payload.sub;
-        console.log('Extracted userId from token:', userId);
 
         const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
         fetch(`${baseUrl}/api/users/perfil/${userId}`, {
@@ -51,7 +53,7 @@ const DatosCliente = () => {
                 return response.json();
             })
             .then(data => {
-                console.log('Fetched user data:', data);
+                const usuario = data.usuario || data;
                 setUserData({
                     id: usuario.id || null,
                     nombres: usuario.nombres || "",
@@ -65,13 +67,113 @@ const DatosCliente = () => {
                 });
             })
             .catch(error => {
-                console.error('Error fetching user data:', error);
                 setError('Error fetching user data: ' + error.message);
             });
     }, []);
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserData({
+            ...userData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handlePaymentVerificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPaymentVerified(e.target.checked);
+    };
+
+    const handleSubmit = () => {
+        if (!userData || !userData.id) {
+            setError('User ID is missing.');
+            return;
+        }
+        if (!paymentVerified) {
+            setError('Please verify the payment method before confirming.');
+            return;
+        }
+        setLoading(true);
+        setError(null);
+        setSuccessMessage(null);
+
+        let token = localStorage.getItem('token');
+        if (!token) {
+            setError('No authentication token found. Please log in.');
+            setLoading(false);
+            return;
+        }
+        token = token.trim().replace(/^"(.*)"$/, '$1');
+
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+
+        // Update user profile
+        fetch(`${baseUrl}/api/users/perfil/${userData.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nombres: userData.nombres,
+                apellidos: userData.apellidos,
+                cedula: userData.ci_ruc,
+                email: userData.correo,
+                celular: userData.telefono,
+                dirrecion: userData.direccion,
+                ciudad: userData.ciudad,
+                provincia: userData.provincia,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update user data: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // After successful user update, send confirmation
+                const rutaId = localStorage.getItem('selected_ruta_id');
+                const busId = localStorage.getItem('selected_bus_id');
+                if (!rutaId || !busId) {
+                    throw new Error('Ruta ID or Bus ID is missing in localStorage.');
+                }
+                const now = new Date();
+                const fechaReserva = now.toISOString().split('T')[0];
+                const horaReserva = now.toTimeString().split(' ')[0];
+
+                return fetch(`${baseUrl}/api/users/confirmacion`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fecha_reserva: fechaReserva,
+                        hora_reserva: horaReserva,
+                        ruta_id: rutaId,
+                        bus_id: busId,
+                        usuario_id: userData.id,
+                    }),
+                });
+            })
+            .then(response => {
+                setLoading(false);
+                if (!response.ok) {
+                    throw new Error('Failed to confirm payment: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                setSuccessMessage('Datos actualizados y pago confirmado correctamente.');
+                setError(null);
+            })
+            .catch(error => {
+                setLoading(false);
+                setError(error.message);
+            });
+    };
+
     if (error) {
-        return <div>{error}</div>;
+        return <div className="error-message">{error}</div>;
     }
 
     if (!userData) {
@@ -90,25 +192,25 @@ const DatosCliente = () => {
                     <div className="tarjetas flex-row">
                         <div className="tarjetaschild">
                             <h3>Nombres</h3>
-                            <p>{userData.nombres}</p>
+                            <input type="text" name="nombres" value={userData.nombres} onChange={handleChange} />
                         </div>
                         <div className="tarjetaschild">
                             <h3>Apellidos</h3>
-                            <p>{userData.apellidos}</p>
+                            <input type="text" name="apellidos" value={userData.apellidos} onChange={handleChange} />
                         </div>
                     </div>
                     <div className="tarjetas flex-row">
                         <div className="tarjetaschild">
                             <h3>CI/RUC</h3>
-                            <p>{userData.ci_ruc}</p>
+                            <input type="text" name="ci_ruc" value={userData.ci_ruc} onChange={handleChange} />
                         </div>
                         <div className="tarjetaschild">
                             <h3>Correo electronico</h3>
-                            <p>{userData.correo}</p>
+                            <input type="email" name="correo" value={userData.correo} onChange={handleChange} />
                         </div>
                     </div>                    
                     <h3>Telefono</h3>
-                    <p>{userData.telefono}</p>
+                    <input type="text" name="telefono" value={userData.telefono} onChange={handleChange} />
                 </div>
                 <div className="titulofacturacioncliente">
                     <h2>Facturación</h2>
@@ -116,15 +218,15 @@ const DatosCliente = () => {
                 </div>
                 <div className="bodyfacturacioncliente">
                     <h3>Dirreccion</h3>
-                    <p>{userData.direccion}</p>
+                    <input type="text" name="direccion" value={userData.direccion} onChange={handleChange} />
                     <div className="tarjetas flex-row">
                         <div className="tarjetaschild">
                             <h3>Ciudad</h3>
-                            <p>{userData.ciudad}</p>
+                            <input type="text" name="ciudad" value={userData.ciudad} onChange={handleChange} />
                         </div>
                         <div className="tarjetaschild">
                             <h3>Provincia</h3>
-                            <p>{userData.provincia}</p>
+                            <input type="text" name="provincia" value={userData.provincia} onChange={handleChange} />
                         </div>
                     </div>           
                 </div>
@@ -135,25 +237,33 @@ const DatosCliente = () => {
                 <div className="tarjetas">
                     <div className="datotarjetas flex">
                         <div className="tarjetaschild">
-                        <h3 className="datosdetarjetas">
-                            Numero de tarjeta
-                        </h3>
-                        <p>xxxx</p>
+                            <h3 className="datosdetarjetas">
+                                Numero de tarjeta
+                            </h3>
+                            <input type="text" placeholder='numero de tarjeta' value={cardNumber} onChange={e => setCardNumber(e.target.value)} />
                         </div>
                         <div className="tarjetaschild">
-                        <h3 className="datosdetarjetas">
-                            Nombre en la tarjeta
-                        </h3>
-                        <p>nombre en la tarjeta</p>
+                            <h3 className="datosdetarjetas">
+                                Nombre en la tarjeta
+                            </h3>
+                            <input type="text" placeholder='nombre del propietario' value={cardName} onChange={e => setCardName(e.target.value)} />
                         </div>
                         <div className="tarjetaschild">
-                        <h3 className="cardnomber">
-                            fecha de vencimiento
-                        </h3>
-                        <p>xx/xx</p>
+                            <h3 className="cardnomber">
+                                fecha de vencimiento
+                            </h3>
+                            <input type="text" placeholder='vencimiento' value={cardExpiry} onChange={e => setCardExpiry(e.target.value)} />
                         </div>
                     </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" checked={paymentVerified} onChange={handlePaymentVerificationChange} />
+                            Verificar método de pago
+                        </label>
+                    </div>
                 </div>
+                <button disabled={loading} onClick={handleSubmit}>Confirmar Pago</button>
+                {successMessage && <div className="success-message">{successMessage}</div>}
             </div>
         </div>
     )
