@@ -82,31 +82,32 @@ const DatosCliente = () => {
         setPaymentVerified(e.target.checked);
     };
 
-    const handleSubmit = () => {
-        if (!userData || !userData.id) {
-            setError('User ID is missing.');
-            return;
-        }
-        if (!paymentVerified) {
-            setError('Please verify the payment method before confirming.');
-            return;
-        }
-        setLoading(true);
-        setError(null);
-        setSuccessMessage(null);
+const handleSubmit = async () => {
+    if (!userData || !userData.id) {
+        setError('User ID is missing.');
+        return;
+    }
+    if (!paymentVerified) {
+        setError('Please verify the payment method before confirming.');
+        return;
+    }
+    setLoading(true);
+    setError(null);
+    setSuccessMessage(null);
 
-        let token = localStorage.getItem('token');
-        if (!token) {
-            setError('No authentication token found. Please log in.');
-            setLoading(false);
-            return;
-        }
-        token = token.trim().replace(/^"(.*)"$/, '$1');
+    let token = localStorage.getItem('token');
+    if (!token) {
+        setError('No authentication token found. Please log in.');
+        setLoading(false);
+        return;
+    }
+    token = token.trim().replace(/^"(.*)"$/, '$1');
 
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
+    try {
         // Update user profile
-        fetch(`${baseUrl}/api/users/perfil/${userData.id}`, {
+        const updateResponse = await fetch(`${baseUrl}/api/users/perfil/${userData.id}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -122,55 +123,61 @@ const DatosCliente = () => {
                 ciudad: userData.ciudad,
                 provincia: userData.provincia,
             }),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to update user data: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // After successful user update, send confirmation
-                const rutaId = localStorage.getItem('selected_ruta_id');
-                const busId = localStorage.getItem('selected_bus_id');
-                if (!rutaId || !busId) {
-                    throw new Error('Ruta ID or Bus ID is missing in localStorage.');
-                }
-                const now = new Date();
-                const fechaReserva = now.toISOString().split('T')[0];
-                const horaReserva = now.toTimeString().split(' ')[0];
+        });
 
-                return fetch(`${baseUrl}/api/users/confirmacion`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        fecha_reserva: fechaReserva,
-                        hora_reserva: horaReserva,
-                        ruta_id: rutaId,
-                        bus_id: busId,
-                        usuario_id: userData.id,
-                    }),
-                });
-            })
-            .then(response => {
-                setLoading(false);
-                if (!response.ok) {
-                    throw new Error('Failed to confirm payment: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                setSuccessMessage('Datos actualizados y pago confirmado correctamente.');
-                setError(null);
-            })
-            .catch(error => {
-                setLoading(false);
-                setError(error.message);
-            });
-    };
+        if (!updateResponse.ok) {
+            throw new Error('Failed to update user data: ' + updateResponse.statusText);
+        }
+
+        // After successful user update, send confirmation
+        const rutaId = localStorage.getItem('selected_ruta_id');
+        const busId = localStorage.getItem('selected_bus_id');
+        if (!rutaId || !busId) {
+            throw new Error('Ruta ID or Bus ID is missing in localStorage.');
+        }
+        const now = new Date();
+        const fechaReserva = now.toISOString().split('T')[0];
+        const horaReserva = now.toTimeString().split(' ')[0];
+
+        const confirmResponse = await fetch(`${baseUrl}/api/users/confirmacion`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                fecha_reserva: fechaReserva,
+                hora_reserva: horaReserva,
+                ruta_id: rutaId,
+                bus_id: busId,
+                usuario_id: userData.id,
+            }),
+        });
+
+        setLoading(false);
+
+        if (!confirmResponse.ok) {
+            throw new Error('Failed to confirm payment: ' + confirmResponse.statusText);
+        }
+
+        const data = await confirmResponse.json();
+
+            // Save reservation ID to localStorage
+            if (data && data.id) {
+                localStorage.setItem('reserva_id', data.id.toString());
+            }
+
+setSuccessMessage('¡Gracias por su compra! Su pago ha sido confirmado correctamente.');
+            setError(null);
+
+            // Redirect to /confirmacion
+            window.location.href = '/confirmacion';
+
+        } catch (error: any) {
+            setLoading(false);
+        setError(error.message);
+    }
+};
 
     if (error) {
         return <div className="error-message">{error}</div>;

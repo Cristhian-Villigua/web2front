@@ -43,6 +43,7 @@ import CuentaCliente from "../pages/client/cuenta/cuentacliente";
 import Metodospagoscliente from "../pages/client/cuenta/metodospagos";
 import Mostrarpasajes from "../pages/client/reservas/mostrarpasajes";
 import GenerarReserva from "../pages/client/facturacion/generarreserva";
+import Confirmacion from "../pages/confirmacion/confirmacion";
 
 export const routes = [
     {
@@ -343,5 +344,9 @@ export const routes = [
     {
         path: '/facturacion',
         element: <GenerarReserva/> 
+    },
+    {
+        path: '/confirmacion',
+        element: <Confirmacion/> 
     },
 ];
