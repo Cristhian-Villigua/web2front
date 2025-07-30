@@ -13,6 +13,7 @@ interface Ruta {
         logo_url?: string;
     };
     bus: {
+        id: number;
         placa: string;
     };
     precio: number;
@@ -57,7 +58,12 @@ const TarjetasPasajes = () => {
             });
     }, [origin, destination, departureDate]);
 
-    const handleComprar = (ruta: Ruta) => {
+const handleComprar = (ruta: Ruta) => {
+        // Store ruta_id and bus_id in localStorage for later use
+        localStorage.setItem('selected_ruta_id', ruta.id.toString());
+        // Assuming bus_id is available as ruta.bus.id, if not, adjust accordingly
+        // Here bus id is not explicitly in ruta, so we store bus placa as bus_id for now
+        localStorage.setItem('selected_bus_id', ruta.bus.id ? ruta.bus.id.toString() : '');
         // Navigate to /facturacion with ruta and passengers info
         navigate('/facturacion', { state: { ruta, passengers } });
     };
@@ -90,7 +96,16 @@ const TarjetasPasajes = () => {
                                     <div className="me-2" style={{ width: 24, height: 24, backgroundColor: '#ccc' }}></div>
                                 )}
                                 <div>
-                                    <div className="fw-bold">{ruta.horaSalida} - {new Date(new Date(ruta.fechaSalida).getTime() + parseDuration(ruta.duracion)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                                    <div className="fw-bold">
+                                        {ruta.horaSalida} - {
+                                            (() => {
+                                                // Combine fechaSalida and horaSalida into one Date object
+                                                const fechaHora = new Date(ruta.fechaSalida + 'T' + ruta.horaSalida);
+                                                const llegada = new Date(fechaHora.getTime() + parseDuration(ruta.duracion));
+                                                return llegada.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                            })()
+                                        }
+                                    </div>
                                     <div className="text-muted">Directo • {ruta.duracion}</div>
                                     <div className="text-muted">{ruta.origen} → {ruta.destino}</div>
                                 </div>
@@ -105,7 +120,7 @@ const TarjetasPasajes = () => {
                                 <div className="text-muted small">Impuestos y cargos: USD {ruta.impuestos}</div>
                             </div>
                             <div className="text-end">
-                                <div className="fw-bold">Precio final: USD {(ruta.precio + ruta.impuestos) * passengers}</div>
+                                <div className="fw-bold">Precio final: USD {ruta.precio  * passengers}</div>
                                 <button className="btn btn-primary btn-sm mt-1" onClick={() => handleComprar(ruta)}>Comprar</button>
                             </div>
                         </div>
@@ -116,11 +131,20 @@ const TarjetasPasajes = () => {
     );
 };
 
-// Helper function to parse duration string like "50 min" to milliseconds
+// Helper function to parse duration string like "HH:mm" or "50 min" to milliseconds
 function parseDuration(durationStr: string): number {
-    const match = durationStr.match(/(\d+)\s*min/);
-    if (match) {
-        const minutes = parseInt(match[1], 10);
+    if (!durationStr) return 0;
+    // Check if format is HH:mm
+    const hhmmMatch = durationStr.match(/^(\d{1,2}):(\d{2})$/);
+    if (hhmmMatch) {
+        const hours = parseInt(hhmmMatch[1], 10);
+        const minutes = parseInt(hhmmMatch[2], 10);
+        return (hours * 60 + minutes) * 60 * 1000;
+    }
+    // Check if format is like "50 min"
+    const minMatch = durationStr.match(/(\d+)\s*min/);
+    if (minMatch) {
+        const minutes = parseInt(minMatch[1], 10);
         return minutes * 60 * 1000;
     }
     return 0;

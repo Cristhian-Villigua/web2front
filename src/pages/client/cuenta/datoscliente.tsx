@@ -39,7 +39,7 @@ const DatosCliente = () => {
         console.log('Extracted userId from token:', userId);
 
         const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
-        fetch(`${baseUrl}/api/users/usuarios/${userId}`, {
+        fetch(`${baseUrl}/api/users/perfil/${userId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -53,14 +53,15 @@ const DatosCliente = () => {
             .then(data => {
                 console.log('Fetched user data:', data);
                 setUserData({
-                    nombres: data.nombres,
-                    apellidos: data.apellidos,
-                    ci_ruc: data.cedula || '',
-                    correo: data.user?.email || '',
-                    telefono: data.celular || '',
-                    direccion: data.dirrecion || '',
-                    ciudad: data.ciudad || '',
-                    provincia: data.provincia || '',
+                    id: usuario.id || null,
+                    nombres: usuario.nombres || "",
+                    apellidos: usuario.apellidos || "",
+                    ci_ruc: usuario.cedula || "",
+                    correo: usuario.user?.email || "",
+                    telefono: usuario.celular || "",
+                    direccion: usuario.direccion || usuario.dirrecion || "",
+                    ciudad: usuario.ciudad || "",
+                    provincia: usuario.provincia || "",
                 });
             })
             .catch(error => {
